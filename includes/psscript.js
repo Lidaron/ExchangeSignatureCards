@@ -68,7 +68,7 @@ module.exports = function (Lang, LogicBuilder) {
 
     function retrieveCommonCardTemplates(commonCardKeys) {
         var pscmd_templates = [ '$CommonCardTemplates = @{' ].concat(commonCardKeys.map(function (key) {
-            return '    "' + key + '" = Get-Content "' + key + '.txt" | Out-String;';
+            return '    "' + key + '" = Get-Content $PSScriptRoot"' + key + '.txt" | Out-String;';
         }));
         pscmd_templates.push('}');
 
@@ -85,7 +85,7 @@ module.exports = function (Lang, LogicBuilder) {
 
     function retrieveCustomCardTemplates() {
         var pscmd_templates = [ '$CustomCardTemplates = @{}' ];
-        pscmd_templates.push('ForEach ($CustomCardFile in Get-ChildItem -Filter "*@*.txt") {');
+        pscmd_templates.push('ForEach ($CustomCardFile in Get-ChildItem $PSScriptRoot -Filter "*@*.txt") {');
         pscmd_templates.push('    $CustomCardTemplates[$CustomCardFile.BaseName] = Get-Content $CustomCardFile.VersionInfo.FileName | Out-String');
         pscmd_templates.push('}');
 
@@ -151,7 +151,7 @@ module.exports = function (Lang, LogicBuilder) {
         psscript.push('Enable-TransportRule -Identity "Signature | Start"');
         psscript.push('Write-Output "Done."');
 
-        return psscript.join('\r\n\r\n');
+        return psscript.join('\r\n\r\n') + '\r\n';
     }
 
     return {

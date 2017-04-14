@@ -31,4 +31,4 @@ var commonCards = {
 
 // Generate the PowerShell Script
 var structuredLogic = LogicBuilder.build(Lang.getAllPredicates(), commonCards);
-console.log(Scripter.generate(Object.keys(commonCards), structuredLogic));
+process.stdout.write(Scripter.generate(Object.keys(commonCards), structuredLogic));
