@@ -68,7 +68,7 @@ module.exports = function (Lang, LogicBuilder) {
 
     function retrieveCommonCardTemplates(commonCardKeys) {
         var pscmd_templates = [ '$CommonCardTemplates = @{' ].concat(commonCardKeys.map(function (key) {
-            return '    "' + key + '" = Get-Content $PSScriptRoot"' + key + '.txt" | Out-String;';
+            return '    "' + key + '" = Get-Content $PSScriptRoot"\\' + key + '.txt";';
         }));
         pscmd_templates.push('}');
 
@@ -80,7 +80,13 @@ module.exports = function (Lang, LogicBuilder) {
             '    exit',
             '}',
         ].join('\r\n');
-        return pscmd_templates.join('\r\n') + '\r\n\r\n' + pscmd_verify;
+
+        var pscmd_stringify = [ '$CommonCardTemplates = @{' ].concat(commonCardKeys.map(function (key) {
+            return '    "' + key + '" = $CommonCardTemplates["' + key + '"] | Out-String;';
+        }));
+        pscmd_stringify.push('}');
+
+        return pscmd_templates.join('\r\n') + '\r\n\r\n' + pscmd_verify + '\r\n\r\n' + pscmd_stringify.join('\r\n');
     }
 
     function retrieveCustomCardTemplates() {
@@ -127,6 +133,12 @@ module.exports = function (Lang, LogicBuilder) {
 
     function generate(commonCardKeys, structuredLogicForCommonCards) {
         var psscript = [];
+        psscript.push([
+            'if (!$PSScriptRoot) {',
+            '    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent',
+            '}',
+        ].join('\r\n'));
+
         psscript.push('Write-Output "Retrieving signature card templates..."');
         psscript.push(retrieveCommonCardTemplates(commonCardKeys));
         psscript.push(retrieveCustomCardTemplates());

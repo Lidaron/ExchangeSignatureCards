@@ -1,18 +1,22 @@
+if (!$PSScriptRoot) {
+    $PSScriptRoot = Split-Path $MyInvocation.MyCommand.Path -Parent
+}
+
 Write-Output "Retrieving signature card templates..."
 
 $CommonCardTemplates = @{
-    "A-1" = Get-Content $PSScriptRoot"A-1.txt" | Out-String;
-    "A-2" = Get-Content $PSScriptRoot"A-2.txt" | Out-String;
-    "A-3" = Get-Content $PSScriptRoot"A-3.txt" | Out-String;
-    "B-1" = Get-Content $PSScriptRoot"B-1.txt" | Out-String;
-    "B-2" = Get-Content $PSScriptRoot"B-2.txt" | Out-String;
-    "B-3" = Get-Content $PSScriptRoot"B-3.txt" | Out-String;
-    "C-1" = Get-Content $PSScriptRoot"C-1.txt" | Out-String;
-    "C-2" = Get-Content $PSScriptRoot"C-2.txt" | Out-String;
-    "C-3" = Get-Content $PSScriptRoot"C-3.txt" | Out-String;
-    "D-1" = Get-Content $PSScriptRoot"D-1.txt" | Out-String;
-    "D-2" = Get-Content $PSScriptRoot"D-2.txt" | Out-String;
-    "D-3" = Get-Content $PSScriptRoot"D-3.txt" | Out-String;
+    "A-1" = Get-Content $PSScriptRoot"\A-1.txt";
+    "A-2" = Get-Content $PSScriptRoot"\A-2.txt";
+    "A-3" = Get-Content $PSScriptRoot"\A-3.txt";
+    "B-1" = Get-Content $PSScriptRoot"\B-1.txt";
+    "B-2" = Get-Content $PSScriptRoot"\B-2.txt";
+    "B-3" = Get-Content $PSScriptRoot"\B-3.txt";
+    "C-1" = Get-Content $PSScriptRoot"\C-1.txt";
+    "C-2" = Get-Content $PSScriptRoot"\C-2.txt";
+    "C-3" = Get-Content $PSScriptRoot"\C-3.txt";
+    "D-1" = Get-Content $PSScriptRoot"\D-1.txt";
+    "D-2" = Get-Content $PSScriptRoot"\D-2.txt";
+    "D-3" = Get-Content $PSScriptRoot"\D-3.txt";
 }
 
 $CommonCardTemplatesNK = ($CommonCardTemplates.Keys | Measure-Object).Count
@@ -20,6 +24,21 @@ $CommonCardTemplatesNV = ($CommonCardTemplates.Values | Measure-Object).Count
 if (-not $CommonCardTemplatesNK -eq $CommonCardTemplatesNV ) {
     Write-Error "At least one Common Card template file could not be found or accessed in this folder. Please make sure it exists and then try again. Aborting."
     exit
+}
+
+$CommonCardTemplates = @{
+    "A-1" = $CommonCardTemplates["A-1"] | Out-String;
+    "A-2" = $CommonCardTemplates["A-2"] | Out-String;
+    "A-3" = $CommonCardTemplates["A-3"] | Out-String;
+    "B-1" = $CommonCardTemplates["B-1"] | Out-String;
+    "B-2" = $CommonCardTemplates["B-2"] | Out-String;
+    "B-3" = $CommonCardTemplates["B-3"] | Out-String;
+    "C-1" = $CommonCardTemplates["C-1"] | Out-String;
+    "C-2" = $CommonCardTemplates["C-2"] | Out-String;
+    "C-3" = $CommonCardTemplates["C-3"] | Out-String;
+    "D-1" = $CommonCardTemplates["D-1"] | Out-String;
+    "D-2" = $CommonCardTemplates["D-2"] | Out-String;
+    "D-3" = $CommonCardTemplates["D-3"] | Out-String;
 }
 
 $CustomCardTemplates = @{}
